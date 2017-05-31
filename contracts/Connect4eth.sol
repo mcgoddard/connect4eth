@@ -118,4 +118,16 @@ contract Connect4eth {
   function getGrid() returns (uint8[6][7]) {
     return grid;
   }
+
+  function getPlayer1() returns (address) {
+    return player1;
+  }
+
+  function getPlayer2() returns (address) {
+    return player2;
+  }
+
+  function getBet() returns (uint) {
+    return bet;
+  }
 }
