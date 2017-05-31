@@ -35,15 +35,15 @@ contract Connect4eth {
     }
   }
 
-  function isStarted() returns (bool) {
+  function isStarted() constant returns (bool) {
     return player1Paid && player2Paid;
   }
 
-  function isFinished() returns (bool) {
+  function isFinished() constant returns (bool) {
     return gameOver;
   }
 
-  function isPlayer1sTurn() returns (bool) {
+  function isPlayer1sTurn() constant returns (bool) {
     if (!player1Paid || !player2Paid || gameOver) throw;
     return player1sTurn;
   }
@@ -115,19 +115,19 @@ contract Connect4eth {
     return false; 
   }
 
-  function getGrid() returns (uint8[6][7]) {
+  function getGrid() constant returns (uint8[6][7]) {
     return grid;
   }
 
-  function getPlayer1() returns (address) {
+  function getPlayer1() constant returns (address) {
     return player1;
   }
 
-  function getPlayer2() returns (address) {
+  function getPlayer2() constant returns (address) {
     return player2;
   }
 
-  function getBet() returns (uint) {
+  function getBet() constant returns (uint) {
     return bet;
   }
 }
