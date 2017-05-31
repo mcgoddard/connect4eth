@@ -11,7 +11,7 @@ contract Connect4eth {
 
   uint bet;
 
-  uint8[7][] grid;
+  uint8[6][7] grid;
   
   function Connect4eth(address firstPlayer, address secondPlayer, uint b) {
     player1 = firstPlayer;
@@ -21,9 +21,6 @@ contract Connect4eth {
     player1sTurn = true;
     gameOver = false;
     bet = b;
-    for (uint8 i = 0; i < 7; i++) {
-      grid.push([0,0,0,0,0,0]);
-    }
   }
 
   function joinGame() payable {
@@ -49,5 +46,40 @@ contract Connect4eth {
   function isPlayer1sTurn() returns (bool) {
     if (!player1Paid || !player2Paid || gameOver) throw;
     return player1sTurn;
+  }
+
+  function makeMove(uint8 col) {
+    // check the game is in the correct state
+    if (!isStarted() || gameOver) throw;
+    // check the correct player is making the move
+    uint8 player = 0;
+    if (player1sTurn && msg.sender == player1) {
+      player = 1;
+    }
+    else if (!player1sTurn && msg.sender == player2) {
+      player = 2;
+    }
+    if (player == 0) throw;
+    // check the column passed
+    if (col > 6) throw;
+    // try to make the move, will throw if the column is full
+    for (uint8 i = 0; i < 8; i++) {
+      if (grid[col][i] == 0) {
+        grid[col][i] = player;
+        break;
+      }
+    }
+    // check if the game is won
+    //for (uint8 i = 0; i < 7; i++) {
+    //  for (uint8 j = 0; j < 6; j++) {
+    //    grid[i][j] =
+    //  }
+    //}
+    // let the other player go
+    player1sTurn = !player1sTurn;
+  }
+
+  function getGrid() returns (uint8[6][7]) {
+    return grid;
   }
 }

@@ -1,0 +1,4 @@
+Connect4eth.deployed().then(function(contractInstance){contractInstance.makeMove(0, {from: web3.eth.accounts[1]}).then(function(v){console.log(v)})})
+Connect4eth.deployed().then(function(contractInstance){contractInstance.joinGame({from: web3.eth.accounts[0], value: 1}).then(function(v){console.log(v)})})
+Connect4eth.deployed().then(function(contractInstance){contractInstance.getGrid.call().then(function(v){console.log(v)})})
+Connect4eth.deployed().then(function(contractInstance){contractInstance.isPlayer1sTurn.call().then(function(v){console.log(v)})})
