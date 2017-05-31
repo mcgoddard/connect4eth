@@ -70,13 +70,49 @@ contract Connect4eth {
       }
     }
     // check if the game is won
-    //for (uint8 i = 0; i < 7; i++) {
-    //  for (uint8 j = 0; j < 6; j++) {
-    //    grid[i][j] =
-    //  }
-    //}
+    if (checkGrid(player)) {
+      gameOver = true;
+      address winningPlayer;
+      if (player1sTurn) {
+        winningPlayer = player1;
+      }
+      else {
+        winningPlayer = player2;
+      }
+      if (!winningPlayer.send(this.balance)) throw;
+    }
     // let the other player go
-    player1sTurn = !player1sTurn;
+    else {
+      player1sTurn = !player1sTurn;
+    }
+  }
+
+  function checkGrid(uint8 player) private returns (bool) {
+    // horizontalCheck 
+    for (uint8 j = 0; j < 6-3 ; j++) {
+        for (uint8 i = 0; i < 7; i++) {
+            if (grid[i][j] == player && grid[i][j+1] == player && grid[i][j+2] == player && grid[i][j+3] == player) return true;
+        }
+    }
+    // vertical check
+    for (i = 0; i < 7-3 ; i++ ) {
+        for (j = 0; j < 6; j++) {
+            if (grid[i][j] == player && grid[i+1][j] == player && grid[i+2][j] == player && grid[i+3][j] == player) return true;
+        }
+    }
+    // ascending diagonal check 
+    for (i = 3; i < 7; i++) {
+        for (j = 0; j < 6-3; j++) {
+            if (grid[i][j] == player && grid[i-1][j+1] == player && grid[i-2][j+2] == player && grid[i-3][j+3] == player) return true;
+        }
+    }
+    // descending diagonal check
+    for (i = 3; i < 7; i++) {
+        for (j = 3; j < 6; j++) {
+            if (grid[i][j] == player && grid[i-1][j-1] == player && grid[i-2][j-2] == player && grid[i-3][j-3] == player) return true;
+        }
+    }
+    return false; 
   }
 
   function getGrid() returns (uint8[6][7]) {
