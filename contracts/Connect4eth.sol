@@ -27,10 +27,10 @@ contract Connect4eth {
   }
 
   function joinGame() payable {
-    if (msg.sender == player1 && !player1Paid) {
+    if (msg.sender == player1 && !player1Paid && msg.value == bet) {
       player1Paid = true;
     }
-    else if (msg.sender == player2 && !player2Paid) {
+    else if (msg.sender == player2 && !player2Paid && msg.value == bet) {
       player2Paid = true;
     }
     else {
