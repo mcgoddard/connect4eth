@@ -5,95 +5,47 @@ import "../stylesheets/app.css";
 import { default as Web3} from 'web3';
 import { default as contract } from 'truffle-contract'
 
-import connect4eth_artifacts from '../../build/contracts/Connect4eth.json'
+import connect4ethTournament_artifacts from '../../build/contracts/Connect4ethTournament.json'
 
-window.Connect4eth = contract(connect4eth_artifacts);
+window.Connect4ethTournament = contract(connect4ethTournament_artifacts);
 
-function populateStaticData() {
-  Connect4eth.deployed().then(function(contractInstance) {
-    contractInstance.getPlayer1().then(function(p) {
-      $("#player-1").html(p);
-    });
-    contractInstance.getPlayer2().then(function(p) {
-      $("#player-2").html(p);
-    });
-    contractInstance.getBet().then(function(b) {
-      $("#bet-amount").html(b.c[0]);
-    });
-  });
-}
-
-function populateDynamicData() {
-  Connect4eth.deployed().then(function(contractInstance) {
-    contractInstance.isStarted().then(function(started) {
-      if (started) {
-        contractInstance.isFinished().then(function(finished) {
-          if (finished) {
-            $("#game-state").html("Finished");
-          }
-          else {
-            $("#game-state").html("Running");
-            populateTurn(contractInstance);
-          }
-        });
-      }
-      else {
-        $("#game-state").html("Pending");
-      }
-    });
-    populateGrid(contractInstance);
-  });
-}
-
-function populateTurn(contractInstance) {
-  contractInstance.isPlayer1sTurn().then(function(player1sTurn) {
-    if (player1sTurn) {
-      $("#current-turn").html("Player 1");
-    }
-    else {
-      $("#current-turn").html("Player 2");
+function populateGamesData(contractInstance) {
+  contractInstance.getGames().then(function(g) {
+    $("#games-rows").html("");
+    for (var i = 0; i < g.length; i++) {
+      $("#games-rows").append("<tr>");
+      $("#games-rows").append("<td>"+g[i].name+"</td>");
+      $("#games-rows").append("</tr>");
     }
   });
 }
 
-function populateGrid(contractInstance) {
-  contractInstance.getGrid().then(function(g) {
-    $("#grid-rows").html("");
-    for (var i = g[0].length - 1; i >= 0; i--) {
-      $("#grid-rows").append("<tr>");
-      for (var j = 0; j < g.length; j++) {
-        $("#grid-rows").append("<td>"+g[j][i]+"</td>");
-      }
-      $("#grid-rows").append("</tr>");
-    }
-  });
-}
-
-window.joinGame = function joinGame() {
-  Connect4eth.deployed().then(function(contractInstance) {
-    let buyIn = $("#bet-amount").html();
-    let joinAddress = $("#buy-in-address").val();
-    $("#join-msg").html("Request to join submitted...");
-    contractInstance.joinGame({value: buyIn, from: joinAddress}).then(function(result) {
-      $("#join-msg").html("Joined game.");
-      populateDynamicData();
+window.addGame = function addGame() {
+  Connect4ethTournament.deployed().then(function(contractInstance) {
+    let p1 = $("#add-game-p1").val();
+    let p2 = $("#add-game-p2").val();
+    let gameName = $("#add-game-name").val();
+    let fee = $("#add-game-entry-fee").val();
+      $("#add-game-msg").html("Adding game...");
+    contractInstance.addGame(gameName, p1, p2, fee).then(function(r) {
+      $("#add-game-msg").html("Game added.");
     }).catch(function(e) {
       console.log(e);
-      $("#join-msg").html("Failed to join game, are you on the players list and does your account have the required buy in?");
+      $("#add-game-msg").html("Failed to add game. Are the players registered?");
     });
   });
 }
 
-window.makeMove = function makeMove() {
-  Connect4eth.deployed().then(function(contractInstance) {
-    let col = $("#chosen-col").val();
-    let moveAddress = $("#move-address").val();
-    contractInstance.makeMove(col, {from: moveAddress}).then(function(result) {
-      $("#move-msg").html("Move made!");
-      populateDynamicData();
+window.addPlayer = function addPlayer() {
+  Connect4ethTournament.deployed().then(function(contractInstance) {
+    let playerName = $("#add-player-name").val();
+    let playerAddress = $("#add-player-address").val();
+    $("#add-player-msg").html("Adding player...");
+    contractInstance.addPlayer(playerAddress, playerName).then(function(v) {
+      $("#add-player-msg").html("Player added.");
     }).catch(function(e) {
       console.log(e);
-      $("#move-msg").html("Failed to make move. Is the move valid, are you in the game and is it your turn?");
+      $("#add-player-msg").html("Failed to add the player, are they already added?");
     });
   });
 }
@@ -109,7 +61,6 @@ $( document ).ready(function() {
     window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
   }
 
-  Connect4eth.setProvider(web3.currentProvider);
-  populateStaticData();
-  populateDynamicData();
+  Connect4ethTournament.setProvider(web3.currentProvider);
+  //populateGamesData();
 });
