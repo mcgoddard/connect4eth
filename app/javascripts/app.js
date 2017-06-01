@@ -7,7 +7,25 @@ import { default as contract } from 'truffle-contract'
 
 import connect4eth_artifacts from '../../build/contracts/Connect4eth.json'
 
-var Connect4eth = contract(connect4eth_artifacts);
+window.Connect4eth = contract(connect4eth_artifacts);
+
+function populateStaticData() {
+  Connect4eth.deployed().then(function(contractInstance) {
+    contractInstance.getPlayer1().then(function(p) {
+      $("#player-1").html(p);
+    });
+    contractInstance.getPlayer2().then(function(p) {
+      $("#player-2").html(p);
+    });
+    contractInstance.getBet().then(function(b) {
+      $("#bet-amount").html(b.c[0]);
+    });
+  });
+}
+
+function populateDynamicData() {
+  populateGrid();
+}
 
 function populateGrid() {
   Connect4eth.deployed().then(function(contractInstance) {
@@ -35,6 +53,6 @@ $( document ).ready(function() {
   }
 
   Connect4eth.setProvider(web3.currentProvider);
-  //populateGameData();
-  populateGrid();
+  populateStaticData();
+  populateDynamicData();
 });
