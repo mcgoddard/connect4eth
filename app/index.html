@@ -12,61 +12,75 @@
 </head>
 <body class="container">
   <h1>A connect4 game implemented on the Ethereum blockchain</h1>
-  <div class="col-sm-7 margin-top-3">
-    <h2>Board</h2>
-    <div class="table-responsive">
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th>0</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>4</th>
-            <th>5</th>
-            <th>6</th>
-          </tr>
-        </thead>
-        <tbody id="grid-rows">
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="col-sm-offset-1 col-sm-4 margin-top-3">
-    <div class="row">
-      <h2>Info</h2>
+  <div class="row">
+    <div class="col-sm-4 margin-top-3">
+      <h2>Board</h2>
       <div class="table-responsive">
         <table class="table table-bordered">
-          <tr>
-            <td>Player 1</td>
-            <td id="player-1"></td>
-          </tr>
-          <tr>
-            <td>Player 2</td>
-            <td id="player-2"></td>
-          </tr>
-          <tr>
-            <td>Buy in</td>
-            <td id="bet-amount"></td>
-          </tr>
-          <tr>
-            <td>Current turn</td>
-            <td id="current-turn"></td>
-          </tr>
-          <tr>
-            <td>Game state</td>
-            <td id="game-state"></td>
-          </tr>
+          <thead>
+            <tr>
+              <th>0</th>
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5</th>
+              <th>6</th>
+            </tr>
+          </thead>
+          <tbody id="grid-rows">
+          </tbody>
         </table>
       </div>
     </div>
-    <div class="row margin-top-3">
-      <h2>Make a move</h2>
-      <div class="col-sm-12">
-        <div id="move-msg"></div>
-        <input type="text" id="chosen-col" class="col-sm-8" placeholder="Column to move in"/>&nbsp;
-        <input type="text" id="address" class="col-sm-8" placeholder="Address of account moving"/>&nbsp;
-        <a href="#" onclick="makeMove()" class="btn btn-primary">Move</a>
+    <div class="col-sm-offset-1 col-sm-7 margin-top-3">
+      <div class="row">
+        <h2>Info</h2>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <tr>
+              <td>Player 1</td>
+              <td id="player-1"></td>
+            </tr>
+            <tr>
+              <td>Player 2</td>
+              <td id="player-2"></td>
+            </tr>
+            <tr>
+              <td>Buy in</td>
+              <td id="bet-amount"></td>
+            </tr>
+            <tr>
+              <td>Current turn</td>
+              <td id="current-turn"></td>
+            </tr>
+            <tr>
+              <td>Game state</td>
+              <td id="game-state"></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 margin-top-3">
+      <div class="row">
+        <h2>Join game</h2>
+        <div class="col-sm-12">
+          <div id="join-msg"></div>
+          <input type="text" id="buy-in-address" class="col-sm-8" placeholder="Address of account joining"/>&nbsp;
+          <a href="#" onclick="joinGame()" class="btn btn-primary">Join</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-offset-1 col-sm-5 margin-top-3">
+      <div class="row margin-top-3">
+        <h2>Make a move</h2>
+        <div class="col-sm-12">
+          <div id="move-msg"></div>
+          <input type="text" id="chosen-col" class="col-sm-8" placeholder="Column to move in"/>&nbsp;
+          <input type="text" id="address" class="col-sm-8" placeholder="Address of account moving"/>&nbsp;
+          <a href="#" onclick="makeMove()" class="btn btn-primary">Move</a>
+        </div>
       </div>
     </div>
   </div>
