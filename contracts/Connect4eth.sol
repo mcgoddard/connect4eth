@@ -44,7 +44,7 @@ contract Connect4eth {
   }
 
   function isPlayer1sTurn() constant returns (bool) {
-    if (!player1Paid || !player2Paid || gameOver) throw;
+    if (!player1Paid || !player2Paid) throw;
     return player1sTurn;
   }
 
