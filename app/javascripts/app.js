@@ -58,6 +58,7 @@ function populateTurn(contractInstance) {
 
 function populateGrid(contractInstance) {
   contractInstance.getGrid().then(function(g) {
+    $("#grid-rows").html("");
     for (var i = g[0].length - 1; i >= 0; i--) {
       $("#grid-rows").append("<tr>");
       for (var j = 0; j < g.length; j++) {
@@ -65,6 +66,35 @@ function populateGrid(contractInstance) {
       }
       $("#grid-rows").append("</tr>");
     }
+  });
+}
+
+window.joinGame = function joinGame() {
+  Connect4eth.deployed().then(function(contractInstance) {
+    let buyIn = $("#bet-amount").html();
+    let joinAddress = $("#buy-in-address").val();
+    $("#join-msg").html("Request to join submitted...");
+    contractInstance.joinGame({value: buyIn, from: joinAddress}).then(function(result) {
+      $("#join-msg").html("Joined game.");
+      populateDynamicData();
+    }).catch(function(e) {
+      console.log(e);
+      $("#join-msg").html("Failed to join game, are you on the players list and does your account have the required buy in?");
+    });
+  });
+}
+
+window.makeMove = function makeMove() {
+  Connect4eth.deployed().then(function(contractInstance) {
+    let col = $("#chosen-col").val();
+    let moveAddress = $("#move-address").val();
+    contractInstance.makeMove(col, {from: moveAddress}).then(function(result) {
+      $("#move-msg").html("Move made!");
+      populateDynamicData();
+    }).catch(function(e) {
+      console.log(e);
+      $("#move-msg").html("Failed to make move. Is the move valid, are you in the game and is it your turn?");
+    });
   });
 }
 
