@@ -24,20 +24,47 @@ function populateStaticData() {
 }
 
 function populateDynamicData() {
-  populateGrid();
-}
-
-function populateGrid() {
   Connect4eth.deployed().then(function(contractInstance) {
-    contractInstance.getGrid().then(function(g) {
-      for (var i = g[0].length - 1; i >= 0; i--) {
-        $("#grid-rows").append("<tr>");
-        for (var j = 0; j < g.length; j++) {
-          $("#grid-rows").append("<td>"+g[j][i]+"</td>");
-        }
-        $("#grid-rows").append("</tr>");
+    contractInstance.isStarted().then(function(started) {
+      if (started) {
+        contractInstance.isFinished().then(function(finished) {
+          if (finished) {
+            $("#game-state").html("Finished");
+          }
+          else {
+            $("#game-state").html("Running");
+            populateTurn(contractInstance);
+          }
+        });
+      }
+      else {
+        $("#game-state").html("Pending");
       }
     });
+    populateGrid(contractInstance);
+  });
+}
+
+function populateTurn(contractInstance) {
+  contractInstance.isPlayer1sTurn().then(function(player1sTurn) {
+    if (player1sTurn) {
+      $("#current-turn").html("Player 1");
+    }
+    else {
+      $("#current-turn").html("Player 2");
+    }
+  });
+}
+
+function populateGrid(contractInstance) {
+  contractInstance.getGrid().then(function(g) {
+    for (var i = g[0].length - 1; i >= 0; i--) {
+      $("#grid-rows").append("<tr>");
+      for (var j = 0; j < g.length; j++) {
+        $("#grid-rows").append("<td>"+g[j][i]+"</td>");
+      }
+      $("#grid-rows").append("</tr>");
+    }
   });
 }
 
