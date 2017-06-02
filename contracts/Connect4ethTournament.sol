@@ -19,7 +19,7 @@ contract Connect4ethTournament {
   }
   
   function addPlayer(address player, bytes32 name) {
-    if (players[player] == bytes32(0x0)) throw;
+    if (players[player] != bytes32(0x0)) throw;
     players[player] = name;
     playerAddresses.push(player);
   }

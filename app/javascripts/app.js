@@ -13,9 +13,24 @@ function populateGamesData(contractInstance) {
   contractInstance.getGames().then(function(g) {
     $("#games-rows").html("");
     for (var i = 0; i < g.length; i++) {
-      $("#games-rows").append("<tr>");
-      $("#games-rows").append("<td>"+g[i].name+"</td>");
-      $("#games-rows").append("</tr>");
+      let gameAddress = g[i];
+      contractInstance.getGameName(g[i]).then(function(name) {
+        $("#games-rows").append("<tr>");
+        $("#games-rows").append("<td>"+web3.toAscii(name)+"</td>");
+        $("#games-rows").append("</tr>");
+      });
+    }
+  });
+}
+
+function populatePlayersData(contractInstance) {
+  contractInstance.getPlayers().then(function(ps) {
+    $("#player-rows").html("");
+    for (var i = 0; i < ps.length; i++) {
+      let playerAddress = ps[i];
+      contractInstance.getPlayerName(playerAddress).then(function(name) {
+        $("#player-rows").append("<tr><td>"+web3.toAscii(name)+"</td><td>"+playerAddress+"</td></tr>");
+      });
     }
   });
 }
@@ -27,8 +42,10 @@ window.addGame = function addGame() {
     let gameName = $("#add-game-name").val();
     let fee = $("#add-game-entry-fee").val();
       $("#add-game-msg").html("Adding game...");
-    contractInstance.addGame(gameName, p1, p2, fee).then(function(r) {
+    contractInstance.addGame(gameName, p1, p2, fee, {from: web3.eth.accounts[0]}).then(function(r) {
       $("#add-game-msg").html("Game added.");
+      populatePlayersData(contractInstance);
+      populateGamesData(contractInstance);
     }).catch(function(e) {
       console.log(e);
       $("#add-game-msg").html("Failed to add game. Are the players registered?");
@@ -41,8 +58,10 @@ window.addPlayer = function addPlayer() {
     let playerName = $("#add-player-name").val();
     let playerAddress = $("#add-player-address").val();
     $("#add-player-msg").html("Adding player...");
-    contractInstance.addPlayer(playerAddress, playerName).then(function(v) {
+    contractInstance.addPlayer(playerAddress, playerName, {from: web3.eth.accounts[0]}).then(function(v) {
       $("#add-player-msg").html("Player added.");
+      populatePlayersData(contractInstance);
+      populateGamesData(contractInstance);
     }).catch(function(e) {
       console.log(e);
       $("#add-player-msg").html("Failed to add the player, are they already added?");
@@ -62,5 +81,8 @@ $( document ).ready(function() {
   }
 
   Connect4ethTournament.setProvider(web3.currentProvider);
-  //populateGamesData();
+  Connect4ethTournament.deployed().then(function(contractInstance) {
+    //populateGamesData();
+    populatePlayersData(contractInstance);
+  });
 });
