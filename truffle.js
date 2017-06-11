@@ -7,6 +7,15 @@ module.exports = {
     "game.html": "game.html",
     "javascripts/game.js": [
       "javascripts/game.js"
+    ],
+    "images/empty.png": [
+      "images/empty.png"
+    ],
+    "images/player1.png": [
+      "images/player1.png"
+    ],
+    "images/player2.png": [
+      "images/player2.png"
     ]
   },
   networks: {

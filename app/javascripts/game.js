@@ -75,7 +75,14 @@ function populateGrid(contractInstance) {
     for (var i = g[0].length - 1; i >= 0; i--) {
       $("#grid-rows").append("<tr>");
       for (var j = 0; j < g.length; j++) {
-        $("#grid-rows").append("<td>"+g[j][i]+"</td>");
+        var image = "empty.png";
+        if (g[j][i] == 1) {
+          image = "player1.png";
+        }
+        else if (g[j][i] == 2) {
+          image = "player2.png";
+        }
+        $("#grid-rows").append("<td><img src='"+image+"' /></td>");
       }
       $("#grid-rows").append("</tr>");
     }

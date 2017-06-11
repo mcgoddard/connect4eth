@@ -14,7 +14,10 @@ module.exports = {
     // Copy our app's index.html to the build folder.
     new CopyWebpackPlugin([
       { from: './app/index.html', to: "index.html" },
-      { from: './app/game.html', to: "game.html" }
+      { from: './app/game.html', to: "game.html" },
+      { from: './app/images/empty.png', to: "empty.png" },
+      { from: './app/images/player1.png', to: "player1.png" },
+      { from: './app/images/player2.png', to: "player2.png" }
     ])
   ],
   module: {
@@ -34,7 +37,8 @@ module.exports = {
           presets: ['es2015'],
           plugins: ['transform-runtime']
         }
-      }
+      },
+      { test: /\.(jpe?g|gif|png|svg|woff|ttf|wav|mp3)$/, loader: "file" }
     ]
   }
 }
