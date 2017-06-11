@@ -42,7 +42,7 @@ window.addGame = function addGame() {
     let gameName = $("#add-game-name").val();
     let fee = $("#add-game-entry-fee").val();
       $("#add-game-msg").html("Adding game...");
-    contractInstance.addGame(gameName, p1, p2, fee, {from: web3.eth.accounts[0]}).then(function(r) {
+    contractInstance.addGame(gameName, p1, p2, fee, {from: web3.eth.accounts[0], gas: 2000000}).then(function(r) {
       $("#add-game-msg").html("Game added.");
       populatePlayersData(contractInstance);
       populateGamesData(contractInstance);
