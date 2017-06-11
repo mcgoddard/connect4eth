@@ -2,6 +2,13 @@
 require('babel-register')
 
 module.exports = {
+  build: {
+    "index.html": "index.hmtl",
+    "game.html": "game.html",
+    "javascripts/game.js": [
+      "javascripts/game.js"
+    ]
+  },
   networks: {
     development: {
       host: 'localhost',

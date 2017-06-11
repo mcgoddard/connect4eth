@@ -22,26 +22,26 @@ function populateGamesData(contractInstance) {
             gameInstance.getPlayer2().then(function(p2) {
               gameInstance.isStarted().then(function(started) {
                 if (!started) {
-                  writeGameRow(gameName, p1, p2, "Pending");
+                  writeGameRow(gameAddress, gameName, p1, p2, "Pending");
                 }
                 else {
                   gameInstance.isFinished().then(function(finished) {
                     if (!finished) {
-                      writeGameRow(gameName, p1, p2, "In progress");
+                      writeGameRow(gameAddress, gameName, p1, p2, "In progress");
                     }
                     else {
                       gameInstance.getWinner().then(function(winner) {
                         if (winner == 0) {
-                          writeGameRow(gameName, p1, p2, "Draw");
+                          writeGameRow(gameAddress, gameName, p1, p2, "Draw");
                         }
                         else if (winner == 1) {
-                          writeGameRow(gameName, p1, p2, "Player 1 won");
+                          writeGameRow(gameAddress, gameName, p1, p2, "Player 1 won");
                         }
                         else if (winner == 2) {
-                          writeGameRow(gameName, p1, p2, "Player 2 won");
+                          writeGameRow(gameAddress, gameName, p1, p2, "Player 2 won");
                         }
                         else {
-                          writeGameRow(gameName, p1, p2, "Error in state");
+                          writeGameRow(gameAddress, gameName, p1, p2, "Error in state");
                         }
                       });
                     }
@@ -56,8 +56,8 @@ function populateGamesData(contractInstance) {
   });
 }
 
-function writeGameRow(name, p1, p2, state) {
-  $("#games-rows").append("<tr><td>"+web3.toAscii(name)+"</td><td>"+p1+"</td><td>"+p2+"</td><td>"+state+"</td></tr>");
+function writeGameRow(address, name, p1, p2, state) {
+  $("#games-rows").append("<tr><td><a href='game.html?address="+address+"'>"+web3.toAscii(name)+"</a></td><td>"+p1+"</td><td>"+p2+"</td><td>"+state+"</td></tr>");
 }
 
 function populatePlayersData(contractInstance) {
