@@ -13,27 +13,29 @@
 <body class="container">
   <h1>A connect4 game implemented on the Ethereum blockchain</h1>
   <div class="row">
-    <div class="col-sm-4 margin-top-3">
+    <div class="col-sm-12 margin-top-3">
       <h2>Board</h2>
       <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th>0</th>
-              <th>1</th>
-              <th>2</th>
-              <th>3</th>
-              <th>4</th>
-              <th>5</th>
-              <th>6</th>
+              <th><a href="#" onclick="makeMove(0)" class="btn btn-primary">Move</a></th>
+              <th><a href="#" onclick="makeMove(1)" class="btn btn-primary">Move</a></th>
+              <th><a href="#" onclick="makeMove(2)" class="btn btn-primary">Move</a></th>
+              <th><a href="#" onclick="makeMove(3)" class="btn btn-primary">Move</a></th>
+              <th><a href="#" onclick="makeMove(4)" class="btn btn-primary">Move</a></th>
+              <th><a href="#" onclick="makeMove(5)" class="btn btn-primary">Move</a></th>
+              <th><a href="#" onclick="makeMove(6)" class="btn btn-primary">Move</a></th>
             </tr>
           </thead>
           <tbody id="grid-rows">
           </tbody>
         </table>
+        <input type="text" id="move-address" class="col-sm-8" placeholder="Address of account making moves"/>
+        <div id="move-msg" class="col-sm-8"></div>
       </div>
     </div>
-    <div class="col-sm-offset-1 col-sm-7 margin-top-3">
+    <div class="col-sm-5 margin-top-3">
       <div class="row">
         <h2>Info</h2>
         <div class="table-responsive">
@@ -62,24 +64,13 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-6 margin-top-3">
+    <div class="col-sm-5 margin-top-3">
       <div class="row">
         <h2>Join game</h2>
         <div class="col-sm-12">
           <div id="join-msg"></div>
-          <input type="text" id="buy-in-address" class="col-sm-8" placeholder="Address of account joining"/>&nbsp;
+          <input type="text" id="buy-in-address" class="col-sm-11" placeholder="Address of account joining"/>&nbsp;
           <a href="#" onclick="joinGame()" class="btn btn-primary">Join</a>
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-offset-1 col-sm-5 margin-top-3">
-      <div class="row">
-        <h2>Make a move</h2>
-        <div class="col-sm-12">
-          <div id="move-msg"></div>
-          <input type="number" id="chosen-col" class="col-sm-8" placeholder="Column to move in"/>&nbsp;
-          <input type="text" id="move-address" class="col-sm-8" placeholder="Address of account moving"/>&nbsp;
-          <a href="#" onclick="makeMove()" class="btn btn-primary">Move</a>
         </div>
       </div>
     </div>

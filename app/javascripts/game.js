@@ -20,8 +20,10 @@ function findGetParameter(parameterName) {
     return result;
 }
 
+window.gameAddress = findGetParameter("address");
+
 function populateStaticData() {
-  Connect4eth.deployed().then(function(contractInstance) {
+  Connect4eth.at(gameAddress).then(function(contractInstance) {
     contractInstance.getPlayer1().then(function(p) {
       $("#player-1").html(p);
     });
@@ -35,7 +37,7 @@ function populateStaticData() {
 }
 
 function populateDynamicData() {
-  Connect4eth.deployed().then(function(contractInstance) {
+  Connect4eth.at(gameAddress).then(function(contractInstance) {
     contractInstance.isStarted().then(function(started) {
       if (started) {
         contractInstance.isFinished().then(function(finished) {
@@ -81,7 +83,7 @@ function populateGrid(contractInstance) {
 }
 
 window.joinGame = function joinGame() {
-  Connect4eth.deployed().then(function(contractInstance) {
+  Connect4eth.at(gameAddress).then(function(contractInstance) {
     let buyIn = $("#bet-amount").html();
     let joinAddress = $("#buy-in-address").val();
     $("#join-msg").html("Request to join submitted...");
@@ -95,11 +97,10 @@ window.joinGame = function joinGame() {
   });
 }
 
-window.makeMove = function makeMove() {
-  Connect4eth.deployed().then(function(contractInstance) {
-    let col = $("#chosen-col").val();
+window.makeMove = function makeMove(column) {
+  Connect4eth.at(gameAddress).then(function(contractInstance) {
     let moveAddress = $("#move-address").val();
-    contractInstance.makeMove(col, {from: moveAddress}).then(function(result) {
+    contractInstance.makeMove(column, {from: moveAddress}).then(function(result) {
       $("#move-msg").html("Move made!");
       populateDynamicData();
     }).catch(function(e) {
