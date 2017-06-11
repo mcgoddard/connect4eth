@@ -6,21 +6,58 @@ import { default as Web3} from 'web3';
 import { default as contract } from 'truffle-contract'
 
 import connect4ethTournament_artifacts from '../../build/contracts/Connect4ethTournament.json'
+import connect4eth_artifacts from '../../build/contracts/Connect4eth.json'
 
 window.Connect4ethTournament = contract(connect4ethTournament_artifacts);
+window.Connect4eth = contract(connect4eth_artifacts);
 
 function populateGamesData(contractInstance) {
   contractInstance.getGames().then(function(g) {
     $("#games-rows").html("");
     for (var i = 0; i < g.length; i++) {
       let gameAddress = g[i];
-      contractInstance.getGameName(g[i]).then(function(name) {
-        $("#games-rows").append("<tr>");
-        $("#games-rows").append("<td>"+web3.toAscii(name)+"</td>");
-        $("#games-rows").append("</tr>");
+      contractInstance.getGameName(gameAddress).then(function(gameName) {
+        Connect4eth.at(gameAddress).then(function(gameInstance) {
+          gameInstance.getPlayer1().then(function(p1) {
+            gameInstance.getPlayer2().then(function(p2) {
+              gameInstance.isStarted().then(function(started) {
+                if (!started) {
+                  writeGameRow(gameName, p1, p2, "Pending");
+                }
+                else {
+                  gameInstance.isFinished().then(function(finished) {
+                    if (!finished) {
+                      writeGameRow(gameName, p1, p2, "In progress");
+                    }
+                    else {
+                      gameInstance.getWinner().then(function(winner) {
+                        if (winner == 0) {
+                          writeGameRow(gameName, p1, p2, "Draw");
+                        }
+                        else if (winner == 1) {
+                          writeGameRow(gameName, p1, p2, "Player 1 won");
+                        }
+                        else if (winner == 2) {
+                          writeGameRow(gameName, p1, p2, "Player 2 won");
+                        }
+                        else {
+                          writeGameRow(gameName, p1, p2, "Error in state");
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            });
+          });
+        });
       });
     }
   });
+}
+
+function writeGameRow(name, p1, p2, state) {
+  $("#games-rows").append("<tr><td>"+web3.toAscii(name)+"</td><td>"+p1+"</td><td>"+p2+"</td><td>"+state+"</td></tr>");
 }
 
 function populatePlayersData(contractInstance) {
@@ -81,8 +118,9 @@ $( document ).ready(function() {
   }
 
   Connect4ethTournament.setProvider(web3.currentProvider);
+  Connect4eth.setProvider(web3.currentProvider);
   Connect4ethTournament.deployed().then(function(contractInstance) {
-    //populateGamesData();
+    populateGamesData(contractInstance);
     populatePlayersData(contractInstance);
   });
 });

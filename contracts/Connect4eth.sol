@@ -8,6 +8,8 @@ contract Connect4eth {
   bool player1Paid;
   bool player2Paid;
   bool gameOver;
+  
+  address winningPlayer;
 
   uint bet;
 
@@ -72,7 +74,6 @@ contract Connect4eth {
     // check if the game is won
     if (checkGrid(player)) {
       gameOver = true;
-      address winningPlayer;
       if (player1sTurn) {
         winningPlayer = player1;
       }
@@ -129,5 +130,12 @@ contract Connect4eth {
 
   function getBet() constant returns (uint) {
     return bet;
+  }
+  
+  function getWinner() constant returns (uint) {
+    if (!isFinished()) throw;
+    if (winningPlayer == player1) return 1;
+    else if (winningPlayer == player2) return 2;
+    return 0;
   }
 }
